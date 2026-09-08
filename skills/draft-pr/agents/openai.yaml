@@ -1,0 +1,7 @@
+interface:
+  display_name: "Draft PR"
+  short_description: "Draft evidence-backed pull request content"
+  default_prompt: "Use $draft-pr to draft a title and body for the current branch."
+
+policy:
+  allow_implicit_invocation: true

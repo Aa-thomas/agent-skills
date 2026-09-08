@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trunk-Based Delivery"
+  short_description: "Safely deliver small changes through trunk"
+  default_prompt: "Use $trunk-based-delivery to take this change from trunk to a validated merge."

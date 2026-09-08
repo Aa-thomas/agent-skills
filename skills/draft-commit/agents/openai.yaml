@@ -1,0 +1,7 @@
+interface:
+  display_name: "Draft Commit"
+  short_description: "Draft or create truthful Conventional Commits"
+  default_prompt: "Use $draft-commit to commit my staged changes with a truthful message."
+
+policy:
+  allow_implicit_invocation: true
