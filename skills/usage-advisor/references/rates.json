@@ -1,0 +1,18 @@
+{
+  "as_of": "2026-08-14",
+  "unit": "credits_per_1m_tokens",
+  "source": "https://learn.chatgpt.com/docs/pricing#what-are-tokens-and-credits",
+  "models": {
+    "gpt-5.6-sol": {"input": 125, "cached_input": 12.5, "output": 750},
+    "gpt-5.6-terra": {"input": 50, "cached_input": 5, "output": 300},
+    "gpt-5.6-luna": {"input": 5, "cached_input": 0.5, "output": 30},
+    "gpt-5.5": {"input": 125, "cached_input": 12.5, "output": 750},
+    "gpt-5.4": {"input": 62.5, "cached_input": 6.25, "output": 375},
+    "gpt-5.4-mini": {"input": 18.75, "cached_input": 1.875, "output": 113}
+  },
+  "notes": [
+    "Fast mode can consume credits at a higher rate.",
+    "Tool and feature charges may be additional.",
+    "Refresh from the official source before relying on this fallback for a material decision."
+  ]
+}

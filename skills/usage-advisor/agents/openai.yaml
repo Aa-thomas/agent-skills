@@ -1,0 +1,4 @@
+interface:
+  display_name: "Usage Advisor"
+  short_description: "Track and forecast Codex token usage"
+  default_prompt: "Use $usage-advisor to estimate this task's token and credit usage before proceeding."
