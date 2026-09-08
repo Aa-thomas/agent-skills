@@ -1,0 +1,4 @@
+interface:
+  display_name: "Model Router"
+  short_description: "Route tasks by quality, risk, and cost"
+  default_prompt: "Use $model-router to choose the lowest-cost reliable model and reasoning effort for this task."
