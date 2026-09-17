@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Tickets"
+  short_description: "Create implementation tickets with explicit delivery contracts"
+  default_prompt: "Use $to-tickets to turn this approved plan into implementation tickets."
+policy:
+  allow_implicit_invocation: false

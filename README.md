@@ -1,6 +1,6 @@
 # Agent Skills
 
-Six reusable skills for careful delivery, model routing, and usage awareness:
+Seven reusable skills for careful delivery, model routing, and usage awareness:
 
 - `trunk-based-delivery` — deliver a small change through a short-lived branch.
 - `draft-commit` — draft or create a truthful Conventional Commit.
@@ -8,6 +8,8 @@ Six reusable skills for careful delivery, model routing, and usage awareness:
 - `validate-pr` — assess whether a branch or pull request is ready.
 - `usage-advisor` — track, explain, and forecast Codex usage.
 - `model-router` — choose models and reasoning effort by cost and risk.
+
+- `to-tickets` — turn approved plans into vertical slices with explicit outcomes, reuse, invariants, failure verification, dependencies, and open decisions; adapted from Matt Pocock.
 
 ## Install
 
@@ -21,6 +23,7 @@ cp -R skills/draft-pr "$CODEX_HOME/skills/"
 cp -R skills/validate-pr "$CODEX_HOME/skills/"
 cp -R skills/usage-advisor "$CODEX_HOME/skills/"
 cp -R skills/model-router "$CODEX_HOME/skills/"
+cp -R skills/to-tickets "$CODEX_HOME/skills/"
 ```
 
 Restart or refresh your agent after installation so it discovers the skills.
