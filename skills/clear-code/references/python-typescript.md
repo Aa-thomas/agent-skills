@@ -27,6 +27,16 @@ dependency bundle. Do not replace a working checker just to match this list.
   required data. Plain Python annotations alone do not enforce these constraints
   at runtime; retain the project's validation and type-checking mechanisms.
 
+For docstrings, follow the project's established style and PEP 257's public
+contract guidance. Add structured argument/result/error sections when they carry
+useful information; do not duplicate type annotations just to fill a template.
+Selected stable Ruff docstring rules can check consistency if Ruff is adopted.
+Consider pydoclint only when mismatches between structured docstrings and code
+justify it: absent and prose-only docstrings are skipped by default, so inspect
+coverage before claiming protection. Check overlap and stability before enabling
+Ruff's pydoclint-derived rules; some require preview mode. Python's built-in
+`doctest` can verify runnable usage examples when such examples are useful.
+
 ## TypeScript and Svelte
 
 - Prefer TypeScript `strict` for new checked packages. Incremental adoption may
@@ -56,6 +66,13 @@ dependency bundle. Do not replace a working checker just to match this list.
   support has analysis limits; inspect its compiler configuration. Add enforcement
   only after useful coverage is established. Do not add it when existing tooling
   already covers the same need adequately.
+
+Use TSDoc-compatible `/** ... */` comments for public interfaces when documenting
+behavior that types do not express. Keep implementation reasoning in local
+comments. If documentation syntax needs enforcement, `eslint-plugin-tsdoc` can
+check it within the existing ESLint setup; it does not verify behavioral claims.
+Do not install a documentation generator or linter solely because this guide
+mentions it. Verify meaningful examples with the existing test tools where useful.
 
 ## Migrate one working slice
 
@@ -89,6 +106,11 @@ Consult documentation for the repository's installed versions before changing
 configuration:
 
 - [Ruff complexity rule](https://docs.astral.sh/ruff/rules/complex-structure/)
+- [PEP 257 docstring conventions](https://peps.python.org/pep-0257/)
+- [Ruff docstring rules](https://docs.astral.sh/ruff/rules/#pydocstyle-d)
+- [pydoclint coverage and configuration](https://jsh9.github.io/pydoclint/)
+- [Python doctest](https://docs.python.org/3/library/doctest.html)
+- [TSDoc ESLint plugin](https://tsdoc.org/pages/packages/eslint-plugin-tsdoc/)
 - [ESLint complexity rule](https://eslint.org/docs/latest/rules/complexity)
 - [Import Linter](https://github.com/seddonym/import-linter)
 - [dependency-cruiser](https://github.com/sverweij/dependency-cruiser)

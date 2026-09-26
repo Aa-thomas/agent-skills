@@ -39,3 +39,22 @@ checklists to apply to every change.
 Stronger testing needs a concrete target: the invariant, failure mode, or measured
 budget it protects. Start with the relevant failure case and existing test tools.
 Expand only when an identified risk or missing evidence warrants the added cost.
+
+For commenting decisions, use these focused sources:
+
+- [Ousterhout: Writing Comments](https://web.stanford.edu/~ouster/cgi-bin/cs190-spring16/lecture.php?topic=comments):
+  separate interface contracts from implementation reasoning; document hidden
+  meanings, keep explanations discoverable, and avoid duplicated documentation.
+- [Google: reviewing code comments](https://google.github.io/eng-practices/review/reviewer/looking-for.html#comments)
+  and [preserving review explanations](https://google.github.io/eng-practices/review/reviewer/comments.html#accepting-explanations):
+  prefer clear code, retain useful reasoning beyond the review conversation, and
+  inspect existing comments affected by a change.
+- [Google: TODO comments](https://google.github.io/styleguide/pyguide.html#312-todo-comments):
+  retain tracked context and a specific date or event for time-bound cleanup.
+- [PEP 257](https://peps.python.org/pep-0257/): document public behavior, effects,
+  errors, and calling restrictions without repeating the signature.
+
+The skill's requirement to verify agent-written guarantees and trace stale
+documentation across affected code is our application of these principles, not
+a claim that a linter can establish semantic correctness. Apply the guidance to
+the change's actual effects; do not impose each source's entire style guide.
