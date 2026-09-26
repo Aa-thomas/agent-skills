@@ -1,4 +1,0 @@
-interface:
-  display_name: "Reviewability First"
-  short_description: "Keep agent-written code understandable and maintainable"
-  default_prompt: "Use $reviewability-first to adapt maintainability rules, practical DDD boundaries, and enforceable checks to this repository."

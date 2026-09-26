@@ -26,7 +26,7 @@ small hook once the project policy exists, for example:
 ```md
 ## Maintainability
 
-For code changes, apply $reviewability-first and follow docs/engineering.md.
+For code changes, apply $clear-code and follow docs/engineering.md.
 Read the affected feature's ownership rules before editing. Run the checks
 listed there. Do not weaken check scope, baselines, or exceptions to pass a change.
 ```

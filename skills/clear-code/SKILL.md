@@ -1,9 +1,11 @@
 ---
-name: reviewability-first
+name: clear-code
 description: Establish and apply maintainability rules for agent-written code. Use when the user asks for agent coding rules, a complexity budget, a maintainability audit, practical DDD boundaries, or a reviewable refactor or migration; also use when repository instructions explicitly adopt this skill. Adapt shared principles to the repository's language, domain, and existing tools. Do not initiate a repository-wide audit or rewrite for an ordinary small fix.
 ---
 
-# Reviewability First
+# Clear Code
+
+Write code that humans can understand and agents can safely maintain.
 
 Make a change understandable without its original ticket. A maintainer should
 be able to find its purpose, inputs, state owner, rules, effects, failure behavior,

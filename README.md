@@ -2,7 +2,7 @@
 
 Reusable skills for maintainable code, careful delivery, model routing, and usage awareness:
 
-- `reviewability-first` — adapt maintainability rules, practical DDD boundaries,
+- `clear-code` — adapt maintainability rules, practical DDD boundaries,
   complexity review, and enforcement to a repository.
 - `trunk-based-delivery` — deliver a small change through a short-lived branch.
 - `draft-commit` — draft or create a truthful Conventional Commit.
@@ -23,18 +23,18 @@ For example, from this repository, install the new skill for personal use:
 ```sh
 mkdir -p "$HOME/.agents/skills"
 # If this skill already exists, review its differences before replacing it.
-test -e "$HOME/.agents/skills/reviewability-first" ||
-  cp -R skills/reviewability-first "$HOME/.agents/skills/"
+test -e "$HOME/.agents/skills/clear-code" ||
+  cp -R skills/clear-code "$HOME/.agents/skills/"
 ```
 
-For a repository such as Evoke, copy `skills/reviewability-first/` into that
-repository as `.agents/skills/reviewability-first/`, including its `agents`,
+For a repository such as Evoke, copy `skills/clear-code/` into that
+repository as `.agents/skills/clear-code/`, including its `agents`,
 `references`, and `assets` folders. Review an existing copy before replacing it.
 Record the source commit when copying so later updates can be reviewed.
 
 Then invoke it in the target repository:
 
-> Use $reviewability-first to adopt maintainability rules for this repository.
+> Use $clear-code to adopt maintainability rules for this repository.
 > Map the existing domain boundaries, add a short AGENTS.md hook and project
 > policy, and implement the smallest useful checks. Preserve working behavior.
 
