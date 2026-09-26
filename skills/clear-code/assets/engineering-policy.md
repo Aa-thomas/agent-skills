@@ -44,6 +44,15 @@ Human review: explain an operation through its actual call path; examine hidden
 state, cross-boundary changes, and abstractions even when numeric checks pass.
 Do not weaken scope, limits, or baselines to make a feature pass its checks.
 
+## Comments and documentation
+
+Document public contracts and non-obvious reasoning without narrating syntax.
+Trace code and contract changes through callers, tests, other implementations,
+and shared documentation. Update or remove inaccurate comments and docstrings
+anywhere affected by the change, including obsolete TODOs and workaround notes.
+Maintain generated documentation at its source. Resolve code/comment conflicts
+against the intended contract; do not hide a regression by changing the prose.
+
 ## Migration boundary, when applicable
 
 Current authority: {{runtime / operation}}. Target: {{runtime / operation}}.

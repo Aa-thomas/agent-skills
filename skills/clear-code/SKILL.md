@@ -87,6 +87,43 @@ of combining independent booleans and optional fields. For example, a completed
 run requires a result and a failed run requires an error. Check that all variants
 are handled using the language's types and relevant behavioral tests.
 
+## Write comments that explain and stay accurate
+
+- Separate documentation for callers from comments for maintainers. Document
+  public behavior, meaningful inputs/results, side effects, errors, and calling
+  restrictions. Put implementation reasoning beside the relevant operation.
+- Explain meanings that names and types cannot express: units, boundary
+  inclusivity, absent/null values, ownership, and rules that must remain true.
+  Avoid narrating syntax or repeating signatures and type annotations.
+- Preserve useful reasoning discovered in chat or review in the code or an
+  existing decision record. Keep one authoritative explanation; use a short
+  local summary and a reference for decisions spanning modules or runtimes.
+- Give TODOs a concrete outstanding action and tracked context where available.
+  For a temporary workaround, state its reason and removal condition. Do not
+  invent an issue link or leave an indefinite "clean this up later" instruction.
+- Verify claims such as "atomic," "safe to retry," or "never writes" against
+  the implementation and relevant tests. Do not invent guarantees or historical
+  rationale. State unresolved uncertainty rather than presenting a guess as fact.
+- Add comments where they improve understanding, without quotas or boilerplate
+  on every function. Simplify avoidably confusing code rather than explaining
+  its syntax at length. Remove abandoned commented-out code; retain meaningful
+  examples, license notices, and tool directives according to their purpose.
+
+For every code or contract change, trace affected references and behavior through
+callers, tests, other implementations, and shared documentation. Review comments,
+docstrings, and explanations **wherever the change affects their accuracy**, not
+only beside edited lines or in changed files. Update or remove stale assumptions,
+names, paths, examples, completed TODOs, and obsolete workaround notes in the same
+change. Update generated documentation at its source and regenerate it. Keep
+cleanup tied to the change's actual effects rather than starting an unrelated
+repository-wide sweep.
+
+When code and commentary disagree, establish the intended contract first. Do not
+rewrite a comment to conceal a regression or delete a still-valid warning simply
+because it is old. Check relevant contracts, tests, and history; report unresolved
+contradictions rather than guessing. Tooling can check structure and some drift,
+but passing a documentation linter does not prove a comment is true.
+
 ## Judge complexity with evidence
 
 Do not turn maintainability into one score. Inspect these independent signals:
