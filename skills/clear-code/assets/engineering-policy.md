@@ -20,6 +20,7 @@ An owner below is the module/context responsible for the rule, not a new service
 
 Forbidden dependencies or private access: {{specific imports or calls}}.
 Cross-context translation: {{where different models meet, or not applicable}}.
+Consequential decisions and accepted limitations: {{existing record or brief rationale; omit for routine choices}}.
 
 ## Invariants and effects
 

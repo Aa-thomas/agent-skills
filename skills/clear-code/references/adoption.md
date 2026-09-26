@@ -50,6 +50,11 @@ baseline or exceptions, and the CI job that runs it. A successful command over
 an empty or irrelevant file set proves nothing. Include new source directories
 and check CI path filters, not just the tool's configuration.
 
+Make failures actionable: identify the rule, affected location, why the boundary
+matters, and an allowed correction or policy link. Use the existing tool's rule
+messages where possible. For example, an invalid import should point to the
+owning module's public interface. A failure must not suggest disabling its rule.
+
 When adding or materially changing enforcement, prove one representative failure
 is caught: use a disposable fixture or isolated edit, observe the expected
 nonzero result, remove the violation, and verify the clean result. Never commit

@@ -55,6 +55,10 @@ A small application can implement both responsibilities in ordinary modules.
 
 ## Make the implementation easy to follow
 
+Follow established language, framework, and local project conventions. Explain
+the concrete problem before introducing a competing pattern. A transferable
+principle need not have an identical implementation in Python and TypeScript.
+
 1. Group code by feature or domain responsibility where that improves locality.
    Keep related UI, state, API calls, and tests discoverable together; retain a
    useful existing structure instead of moving files for stylistic uniformity.
@@ -63,9 +67,11 @@ A small application can implement both responsibilities in ordinary modules.
 3. Keep business decisions independent of HTTP, storage, UI, and provider details
    where practical. Pass validated values or narrow dependencies explicitly;
    add a forwarding layer only when it protects a named boundary or present need.
-4. Extract an abstraction for demonstrated shared meaning in real consumers, or
-   to isolate a correctness or side-effect boundary. Potential future reuse alone
-   is insufficient. Prefer a cohesive function over a chain of tiny helpers.
+4. Judge an abstraction by what callers no longer need to understand. A single
+   consumer can justify a module that hides a difficult or change-prone decision
+   behind a simpler interface, or protects a real boundary. Demonstrated reuse
+   is useful evidence; speculative future capabilities are insufficient. Prefer
+   a cohesive operation over a chain of tiny helpers.
 5. Allow inexpensive local duplication when it aids understanding. Give accepted
    business decisions one authoritative owner; do not duplicate them casually
    across a browser, backend, worker, or second language.
@@ -75,6 +81,11 @@ A small application can implement both responsibilities in ordinary modules.
 7. Validate untrusted input at runtime. Static types do not validate network,
    persistence, or model output. Prefer one canonical boundary contract and
    generated types where generation removes genuine drift.
+
+When fields depend on one another, model the valid variants explicitly instead
+of combining independent booleans and optional fields. For example, a completed
+run requires a result and a failed run requires an error. Check that all variants
+are handled using the language's types and relevant behavioral tests.
 
 ## Judge complexity with evidence
 
@@ -106,12 +117,22 @@ state the present need, the complexity it removes or necessarily introduces,
 and the simpler option considered. A net increase may be justified by a real
 requirement; speculative flexibility is not a sufficient justification.
 
+For a consequential, nonobvious decision, retain the rationale, rejected
+alternative, and accepted limitations near the code or in an existing decision
+record. Keep it brief; routine edits do not need a separate design document.
+
 ## Apply checks and handle migrations
 
 Use the repository's existing tools first. Read the
 [Python and TypeScript guidance](references/python-typescript.md) only for those
 languages or a migration involving them. Other stacks use the same ownership
 principles with their own native tools.
+
+Keep structural refactors and behavior changes in separately reviewable steps.
+Establish passing checks for affected observable behavior before restructuring,
+and keep them passing through small changes. If coverage is missing, add focused
+characterization tests where the risk warrants them. Identify known defects
+explicitly; changing that behavior is a separate step, not a hidden cleanup.
 
 For a migration, select a small working slice, preserve its observable contract,
 and identify cutover and rollback before adding a second implementation. If both
@@ -122,6 +143,10 @@ Run required repository checks and focused checks for affected behavior. Test
 invariants, public boundaries, and meaningful failure cases rather than helper
 structure. Treat edits to check scope, baselines, or suppressions as policy changes
 that need explicit review; do not weaken a gate to make the current change pass.
+
+For design rationale or deciding whether stronger verification is warranted,
+read [principles and their limits](references/design-principles.md). Apply them
+in proportion to the change; they are not additional mandatory tooling.
 
 ## Finish concisely
 

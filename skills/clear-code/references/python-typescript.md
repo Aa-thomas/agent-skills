@@ -22,12 +22,19 @@ dependency bundle. Do not replace a working checker just to match this list.
 - Validate external data at entry points using the project's established schema
   mechanism. Keep a durable rule near its domain operation even when a transport
   schema also rejects malformed input.
+- Represent state-dependent fields with explicit variants. If Pydantic is already
+  used at the boundary, discriminated unions can validate the selected variant's
+  required data. Plain Python annotations alone do not enforce these constraints
+  at runtime; retain the project's validation and type-checking mechanisms.
 
 ## TypeScript and Svelte
 
 - Prefer TypeScript `strict` for new checked packages. Incremental adoption may
   need explicit boundaries around legacy code. Confirm that framework files,
   workspace packages, and generated clients are included in the relevant checks.
+- Use discriminated unions for meaningful state variants and exhaustive handling
+  where appropriate, so adding a state exposes callers that need updating. Keep
+  runtime validation at external boundaries; a type assertion cannot supply it.
 - Use existing ESLint support for `complexity` and nesting when appropriate.
   Type assertions, `any`, ignored errors, and broad exclusions must not replace
   boundary validation or bypass a newly adopted rule.
@@ -43,6 +50,12 @@ dependency bundle. Do not replace a working checker just to match this list.
   apps, do not keep per-user state in shared server module variables.
 - Test a changed user flow and its relevant loading, empty, error, or conflict
   states. Do not require a full browser suite for an isolated documentation change.
+- Consider Knip when unused files, exports, or dependencies make migration cleanup
+  difficult. Start with reporting only and verify entry points, dynamic consumers,
+  generated inputs, and framework configuration before deleting anything. Svelte
+  support has analysis limits; inspect its compiler configuration. Add enforcement
+  only after useful coverage is established. Do not add it when existing tooling
+  already covers the same need adequately.
 
 ## Migrate one working slice
 
@@ -80,6 +93,10 @@ configuration:
 - [Import Linter](https://github.com/seddonym/import-linter)
 - [dependency-cruiser](https://github.com/sverweij/dependency-cruiser)
 - [TypeScript strict](https://www.typescriptlang.org/tsconfig/strict.html)
+- [TypeScript discriminated unions](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions)
+- [Pydantic discriminated unions](https://docs.pydantic.dev/latest/concepts/unions/#discriminated-unions)
 - [Svelte checking](https://svelte.dev/docs/cli/sv-check)
 - [SvelteKit state management](https://svelte.dev/docs/kit/state-management)
 - [Hypothesis stateful testing](https://hypothesis.readthedocs.io/en/latest/stateful.html)
+- [How Knip works](https://knip.dev/explanations/how-knip-works)
+- [Knip compiler coverage and limitations](https://knip.dev/features/compilers)
