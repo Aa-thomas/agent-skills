@@ -6,6 +6,8 @@ Reusable skills for maintainable code, careful delivery, model routing, and usag
   complexity review, and enforcement to a repository.
 - `event-modeling` — create and review visual Event Models with concrete data,
   ownership, and command/view scenarios; usable independently for planning.
+- `explain-code` — understand a change through its behavior, change-impact map,
+  important alternatives, and an explanation checked against the evidence.
 - `trunk-based-delivery` — deliver a small change through a short-lived branch.
 - `draft-commit` — draft or create a truthful Conventional Commit.
 - `draft-pr` — draft an evidence-backed pull request title and body.
@@ -57,6 +59,14 @@ configuring checks are separate work. Installation does not automatically rewrit
 code or enforce every recommendation.
 
 ## Contents
+
+Use Explain Code for a focused Markdown explanation or a substantial HTML
+walkthrough, with optional questions and small demonstrations:
+
+> Use $explain-code to explain this PR and where a future requirement would fit.
+
+It reads the project's own rules and does not require the other skills to be
+installed. Copy its complete folder using the same installation convention above.
 
 Each directory contains a `SKILL.md` instruction file and an
 `agents/openai.yaml` interface definition. Some skills also include references or

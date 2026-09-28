@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explain Code"
+  short_description: "Understand code changes and where to take them next"
+  default_prompt: "Use $explain-code to explain this change, map its impact, compare important alternatives, and check the explanation against the code."
