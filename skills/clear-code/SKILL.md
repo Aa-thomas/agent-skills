@@ -1,6 +1,6 @@
 ---
 name: clear-code
-description: Establish and apply maintainability rules for agent-written code. Use when the user asks for agent coding rules, Event Modeling, a complexity budget, a maintainability audit, practical DDD boundaries, or a reviewable refactor or migration; also use when repository instructions explicitly adopt this skill. Adapt shared principles to the repository's language, domain, and existing tools. Do not initiate a repository-wide audit or rewrite for an ordinary small fix.
+description: Establish and apply maintainability rules for agent-written code. Use when the user asks for agent coding rules, a complexity budget, a maintainability audit, practical DDD boundaries, or a reviewable refactor or migration; also use when repository instructions explicitly adopt this skill. Adapt shared principles to the repository's language, domain, and existing tools. Do not initiate a repository-wide audit or rewrite for an ordinary small fix.
 ---
 
 # Clear Code
@@ -55,31 +55,17 @@ A small application can implement both responsibilities in ordinary modules.
 
 ## Model behavior with Event Modeling
 
-Before implementing a new or changed business workflow, create or update its
-actual Event Model. Include changes to read behavior, permissions, stored state,
-and external effects. Read and follow the
-[Event Modeling method](references/event-modeling.md) when creating or revising
-a model; its seven steps, four patterns, and completeness review are required for
-that work. Use existing models and specifications as the starting point.
+Before implementing a new or changed business workflow, use the companion
+[$event-modeling](../event-modeling/SKILL.md) skill to create or update its actual
+Event Model. This includes changes to reads, permissions, stored state, and
+external effects. Implement against its command/view scenarios and keep the
+model accurate wherever behavior changes. Reuse the applicable model for
+behavior-preserving work; unrelated mechanical edits need no new model.
 
-Produce an editable visual timeline with events, screens or system actors,
-commands, read models, ownership lanes, and concrete data. Include automation and
-external translation where the workflow uses them. A prose summary, generic
-flowchart, or table alone does not satisfy the modeling requirement. Model the
-affected journey and its relevant alternatives; keep routine changes bounded by
-reusing the applicable model. A change with no effect on modeled behavior does
-not require drawing a new model.
-
-Keep one authoritative model with the feature specification. Separate observed
-behavior, proposed changes, and unanswered questions; do not invent product rules
-to complete the picture. Preserve the repository's existing design and approval
-requirements. Connect command/view scenarios to implementation slices and actual
-test evidence. For migrations, use the same scenarios across the old and new
-implementations and record any intentionally changed behavior separately.
-
-Model semantics transfer across languages and storage designs. Adopting Event
-Modeling does not authorize event sourcing, an event bus, new services, or a
-particular diagramming product.
+Install both skills together. Event Modeling owns the method and visual examples;
+Clear Code owns implementation quality and verification. If the companion skill
+is unavailable, report the missing dependency before modeling-dependent work;
+do not replace the required method with a summary or duplicate it here.
 
 ## Make the implementation easy to follow
 

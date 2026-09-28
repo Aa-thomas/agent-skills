@@ -12,9 +12,10 @@
    operations, permitted dependencies, and forbidden cross-boundary access.
    Explain conflicting meanings using separate contexts and explicit contracts.
    Locate existing Event Models and feature specifications. For workflow work,
-   follow the [Event Modeling method](event-modeling.md), retaining one
-   authoritative visual model and its editable source. Adopting this policy does
-   not require retroactively modeling the entire repository.
+   use the companion [$event-modeling](../../event-modeling/SKILL.md) skill,
+   retaining one authoritative visual model and its editable source. Confirm
+   both skills are available before adopting that requirement. Adopting this
+   policy does not require retroactively modeling the entire repository.
 4. Identify the smallest useful enforcement gap. Reuse a working linter, type
    checker, or test runner. Add a tool only when a concrete rule needs it and the
    maintenance cost is justified. Do not install every tool in the language guide.

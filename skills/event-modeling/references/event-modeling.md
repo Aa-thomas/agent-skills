@@ -4,7 +4,7 @@ Use Adam Dymitruk's Event Modeling method for the workflow in scope. The model
 describes information changing over time through concrete examples. Preserve the
 method when reducing scope; model fewer workflow steps instead of replacing the
 model with a summary table. The organization, review rules, and export example
-below are Clear Code's application of the method.
+below are this skill's application of the method.
 
 ## Build or revise the model
 

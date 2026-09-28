@@ -35,13 +35,12 @@ Retries, conflicts, and failure semantics: {{relevant operations and policy}}.
 
 Authoritative models and editable sources: {{existing feature specifications / model paths}}.
 Rendering and review: {{existing diagram tool / export process; no new tool required}}.
+Method reference: {{link to the event-modeling skill or maintained project reference}}.
 
-Before implementing a new or changed business workflow, create or update its
-visual Event Model: discover events, order the timeline, add screens or system
-actors, connect commands and read models, group ownership, and specify scenarios.
-Show concrete data and the four patterns where used: state change, information
-display, external translation, and automation. Trace each modeled field to its
-source and destination. A summary table alone is insufficient.
+Before implementing a new or changed business workflow, use `$event-modeling`
+to create or update its actual visual Event Model. Keep the full method and
+examples in that skill; use the model's command/view scenarios to guide
+implementation and review. Install it alongside `$clear-code` for agent use.
 
 Associate each scenario with one command or read model. Cover meaningful
 rejection and failure cases; identify relevant retry, concurrency, and partial
