@@ -11,11 +11,13 @@
 3. Map responsibilities with existing paths: owner, accepted state, public
    operations, permitted dependencies, and forbidden cross-boundary access.
    Explain conflicting meanings using separate contexts and explicit contracts.
-   Locate existing Event Models and feature specifications. For workflow work,
-   use the companion [$event-modeling](../../event-modeling/SKILL.md) skill,
-   retaining one authoritative visual model and its editable source. Confirm
-   both skills are available before adopting that requirement. Adopting this
-   policy does not require retroactively modeling the entire repository.
+   Locate existing Event Models and feature specifications. Use
+   [em](https://github.com/milehimikey/em) for workflow modeling, retaining one
+   authoritative `.em` source, rendered view, and linked scenarios. Pin the tool
+   through the repository's development tooling and record setup/check commands.
+   A global installation helps the current maintainer; it does not configure
+   another machine or CI. Keep domain decisions in the project policy. Adoption
+   does not require retroactively modeling the entire repository.
 4. Identify the smallest useful enforcement gap. Reuse a working linter, type
    checker, or test runner. Add a tool only when a concrete rule needs it and the
    maintenance cost is justified. Do not install every tool in the language guide.
@@ -47,6 +49,7 @@ should still be understandable by a human or an agent without skill support.
 | Types at public interfaces | Configured type checker with inspected source coverage |
 | Excessive branching or nesting | Linter/analyzer with a measured baseline |
 | Domain invariant and rejection semantics | Focused behavioral tests |
+| Event Model structure | Pinned em validation and rendered artifact inspection; declare fields and review warnings |
 | Event Model completeness and implementation agreement | Visual/data review plus tests for the modeled command/view scenarios |
 | API compatibility across runtimes | Shared wire fixtures and contract tests |
 | Human comprehension and useful abstraction | Review of a representative operation |

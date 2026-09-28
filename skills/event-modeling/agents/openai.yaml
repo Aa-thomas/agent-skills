@@ -1,4 +1,0 @@
-interface:
-  display_name: "Event Modeling"
-  short_description: "Design workflows with visual event models and scenarios"
-  default_prompt: "Use $event-modeling to create or review a visual event model with concrete data and command/view scenarios for this workflow."
