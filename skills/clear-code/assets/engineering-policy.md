@@ -34,13 +34,15 @@ Retries, conflicts, and failure semantics: {{relevant operations and policy}}.
 ## Event Modeling
 
 Authoritative models and editable sources: {{existing feature specifications / model paths}}.
-Rendering and review: {{existing diagram tool / export process; no new tool required}}.
-Method reference: {{link to the event-modeling skill or maintained project reference}}.
+Tool: [em](https://github.com/milehimikey/em) (`@milehimikey/em`).
+Pinned version and installation: {{development dependency / setup command}}.
+Validation and rendering: {{verified local commands and CI coverage, if configured}}.
 
-Before implementing a new or changed business workflow, use `$event-modeling`
-to create or update its actual visual Event Model. Keep the full method and
-examples in that skill; use the model's command/view scenarios to guide
-implementation and review. Install it alongside `$clear-code` for agent use.
+Before implementing a new or changed business workflow, use em to create or
+update its `.em` source and rendered Event Model. Follow the upstream method and
+use the linked command/view scenarios to guide implementation and review. Declare
+concrete fields on commands, events, and views; review validation warnings and
+inspect the rendered diagram. Structural validity is not behavioral proof.
 
 Associate each scenario with one command or read model. Cover meaningful
 rejection and failure cases; identify relevant retry, concurrency, and partial
@@ -48,7 +50,9 @@ completion behavior. Link implementation slices and tests to these scenarios.
 Record unknown product decisions explicitly and preserve existing review gates.
 Update the model and all affected explanations with the implementation. Reuse
 existing models for changes that preserve behavior; do not require new diagrams
-for unrelated mechanical edits. Modeling does not require event sourcing.
+for unrelated mechanical edits. Modeling does not require event sourcing. Start
+with model/render/validate; em's optional lifecycle, skill bundle, and MCP server
+are separate adoption decisions and do not replace this project's delivery rules.
 
 ## Checks and complexity budget
 
