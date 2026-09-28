@@ -1,57 +1,57 @@
 ---
 name: trunk-based-delivery
-description: Deliver a small, coherent repository change through a trunk-based workflow. Use when Codex starts a change, creates a branch, opens a PR, asks whether a PR is ready, merges or ships a PR, or is asked to commit directly to trunk.
+description: Carry one coherent repository change through a short-lived branch, commit, pull request, validation, and authorized merge. Use when the user asks to start, ship, or take a change through multiple delivery stages. Do not use for a commit-message-only, PR-draft-only, or read-only PR-readiness request.
 ---
 
 # Trunk-Based Delivery
 
-Keep trunk continuously releasable. Work in one short-lived branch for one
-coherent change, validate it, and merge it promptly. Treat the repository's
-checked-in policy and the user's explicit request as higher priority.
+Keep trunk releasable while moving one coherent change through the stages the user
+requested. Resume from the repository's actual state; do not restart completed
+stages or ask again for authorization already given in the session.
 
-## Establish the workflow
+## Establish the delivery state
 
-1. Inspect `git status --short`, the current branch, remotes, and the remote
-   default branch. Call that default branch **trunk**; do not assume its name.
-2. Preserve a dirty worktree. Do not switch branches, stage unrelated files,
-   discard changes, or delete a branch without explicit authorization.
-3. For ordinary change work, fetch trunk and create a descriptive branch from
-   its current remote tip before editing. Use one of `feat/`, `fix/`, `docs/`,
-   `refactor/`, `test/`, or `chore/` when it fits the change.
-4. Keep the branch to one reviewable vertical slice. Split unrelated changes
-   before committing or opening a PR.
+Inspect the worktree, current branch, remotes, remote default branch, commits, and
+any existing PR. Treat the remote default as trunk without assuming its name.
+Identify which stages are complete, current, and still requested.
 
-## Commit and open a PR
+Preserve unrelated and dirty work. Do not discard changes, stage unrelated files,
+rewrite shared history, switch away from uncommitted work, or delete branches
+without explicit authorization.
 
-1. Use `$draft-commit` for the staged diff. Do not commit directly to trunk
-   unless the user expressly requests that exception.
-2. Push the branch and use `$draft-pr` against trunk. Make the PR describe the
-   complete branch diff, not only the last commit.
-3. Run repository-prescribed checks plus focused checks appropriate to the
-   change. Record exact commands and observed outcomes; leave unchecked items
-   visibly unchecked.
+For new work, refresh remote trunk and create a descriptive short-lived branch
+before editing. Keep one reviewable change per branch. If work already exists on
+a suitable branch, continue there rather than creating a duplicate.
 
-## Validate and merge
+## Move through the requested stages
 
-1. Use `$validate-pr` before merge. Require a coherent diff, a clean merge,
-   all required remote checks, and no known local test failure.
-2. Do not merge merely because a PR exists. Merge only after the user
-   explicitly authorizes it and GitHub (or the repository host) reports it is
-   mergeable.
-3. Follow the repository's configured merge method. If none is evident, ask
-   the user whether to use merge, squash, or rebase; do not guess.
-4. Do not delete the feature branch unless the user expressly asks.
+1. Implement and verify the bounded change using repository guidance.
+2. Use `$draft-commit` for one coherent staged diff when a commit is requested.
+3. Push and use `$draft-pr` when PR publication is requested. The PR must describe
+   the complete branch diff.
+4. Use `$validate-pr` before a requested merge. Refresh live mergeability,
+   required checks, and PR content.
+5. Merge only when the current session authorizes the merge and the host reports
+   it is allowed. Follow the configured merge method; if none is established and
+   the choice would change history, obtain the user's choice.
 
-## Verify the outcome
+Do not treat a commit, push, PR, or passing local check as authorization for the
+next consequential stage. Equally, do not interrupt already authorized work with
+repeated confirmation requests.
 
-1. Confirm the PR is merged and record the resulting trunk commit.
-2. Fetch trunk without modifying unrelated local work.
-3. Report the PR URL, merged commit, checks run, and any intentionally deferred
-   validation or live acceptance.
+## Handle interruptions and failures
 
-## Explicit exceptions
+On a conflict, rejected push, failing check, unavailable host, or uncertain
+mergeability, preserve the work and report the exact failed stage. Retry only
+when the failure is transient and the retry cannot duplicate an external effect;
+otherwise re-read the remote state before proceeding.
 
-When the user explicitly requests a direct-to-trunk or emergency change,
-preserve the same evidence standard: inspect scope, run proportionate checks,
-and report that the normal PR boundary was intentionally bypassed. Do not turn
-an implied urgency into an exception.
+Direct-to-trunk and emergency requests are explicit exceptions. Preserve the same
+scope and evidence standards and record which normal boundary was bypassed.
+
+## Finish with evidence
+
+Report the furthest completed stage, branch, commits, PR URL when present, exact
+checks and outcomes, and anything still required. After merge, verify the merged
+PR and resulting trunk commit. Do not delete the branch unless that action was
+authorized.

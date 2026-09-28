@@ -1,29 +1,36 @@
 ---
 name: draft-commit
-description: Draft a truthful Conventional Commit message from the currently staged Git diff, and create the commit when requested. Use when the user says "commit", "commit this", or "commit my staged changes", asks for a commit message, wants to describe staged changes, or needs a standardized commit title and body.
+description: Draft a truthful commit message from the currently staged Git diff, or create that commit when the user asks to commit. Use for staged-change commit messages and commit actions. Do not use for unstaged work, whole-branch PR descriptions, or the broader delivery lifecycle.
 ---
 
 # Draft a Commit
 
-Produce a commit message for one coherent staged change. Create the commit only when the user's request explicitly includes the commit action, including concise requests such as `commit`, `commit this`, or `commit my staged changes`.
+Describe one coherent staged change. Treat the staged diff as the complete source
+of truth for the message.
 
-## Inspect the staged change
+## Resolve the requested action
 
-1. Run `git status --short`.
-2. Resolve the current branch and the remote default branch. If they are the
-   same, do not commit unless the user explicitly requested a direct-to-trunk
-   exception; otherwise ask to create a short-lived branch first.
-3. Run `git diff --staged --stat` and `git diff --staged --find-renames`.
-4. Inspect relevant staged binary, mode, rename, or submodule changes that the textual diff does not explain.
-5. If nothing is staged, stop and say that no commit message can be grounded in a staged diff.
-6. If the staged files contain unrelated changes, identify the proposed boundaries and recommend splitting them before drafting a final message.
+Draft only when the user asks for a message, wording, or description. Create the
+commit when the user asks to commit, including concise requests such as “commit”
+or “commit this.” Do not repeat a confirmation already supplied in the current
+session.
 
-Treat the staged diff as the source of truth. Use repository history only to learn established scope vocabulary and formatting. Never describe unstaged or untracked changes.
-For the complete branch, PR, and merge lifecycle, use `$trunk-based-delivery`.
+Inspect `git status --short`, the current branch, and the remote default branch.
+Then inspect `git diff --staged --stat` and the full staged diff including
+renames, modes, binaries, and submodules where relevant.
 
-## Construct the message
+Stop with a specific next action when:
 
-Use this form:
+- nothing is staged;
+- the staged files contain unrelated changes that need separate commits; or
+- the current branch is trunk and no direct-to-trunk exception is authorized.
+
+Never describe unstaged or untracked work as committed. Use history only to learn
+the repository's established message style and scope vocabulary.
+
+## Write the message
+
+Follow a checked-in commit convention when one exists. Otherwise use:
 
 ```text
 <type>(<scope>): <imperative summary>
@@ -33,30 +40,26 @@ Use this form:
 <optional issue or breaking-change footer>
 ```
 
-Choose exactly one type:
+Choose a type that reflects the staged behavior: `feat`, `fix`, `refactor`,
+`test`, `docs`, `chore`, `build`, `ci`, or `perf`. Choose the primary
+domain or component as scope. Keep the summary concise, imperative, and free of a
+trailing period.
 
-- `feat`: add user-visible capability
-- `fix`: correct faulty behavior
-- `refactor`: restructure without intentionally changing behavior
-- `test`: add or revise tests without a product-code change
-- `docs`: change documentation only
-- `chore`: perform maintenance outside the other types
-- `build`: change build tooling or dependencies
-- `ci`: change continuous-integration behavior
-- `perf`: improve performance
+Include a body only when it helps explain behavior, a material design choice, or
+an important limitation. Add `BREAKING CHANGE:` only when the staged diff proves
+an incompatible public change. Add issue references only from inspected artifacts
+or user context. Never invent motivation, verification, compatibility, or future
+work.
 
-Choose a specific, stable scope from the primary affected responsibility, such as `model-call`, `validation`, `agent-loop`, or `curriculum`. Prefer an established repository scope when one exists. Do not use a filename as the scope when a domain or component name is clearer.
+## Return or create
 
-Write an imperative summary that completes “This commit will …”. Keep the header at most 72 characters, prefer lower case after the colon, and omit a trailing period. Wrap body text near 72 characters.
+For a draft, return only the complete message in one fenced text block, followed
+by a material coherence warning if needed.
 
-Add `BREAKING CHANGE: <description>` only when the staged diff clearly introduces an incompatible public behavior or interface. Add issue footers only when an issue identifier is present in the staged artifacts or supplied by the user.
+For an authorized commit, create it with the complete message. If Git rejects the
+operation, report the exact failure and leave staged work intact. On success,
+return the commit hash and exact message. Do not push, open a PR, or change branch
+state as part of this skill.
 
-## Protect accuracy
-
-- Describe only behavior and intent demonstrated by the staged diff.
-- Do not invent motivation, test results, compatibility claims, issue links, or follow-up work.
-- Do not claim a behavior is unchanged unless the diff supports that conclusion.
-- Prefer omitting a body over filling it with generic restatement.
-- If the correct type or primary change is genuinely ambiguous, state the ambiguity and provide at most two labeled candidates.
-
-When the user asks only for a draft, return the proposed commit message in a fenced text block. When the user asks to commit, run `git commit` with the complete message, then report the created commit hash and exact message. Follow either result only with concise warnings that affect trustworthiness or coherence.
+Use `$trunk-based-delivery` only when the user requested the broader branch,
+publication, validation, or merge workflow.
