@@ -1,6 +1,6 @@
 ---
 name: model-router
-description: Choose the lowest-cost reliable model, reasoning effort, context strategy, and subagent route for Codex work. Use before large plans or implementations, before spawning subagents, when work is ambiguous, high-risk, cross-system, or changing phase, and whenever the user asks which model to use or how to minimize token or credit usage. Do not invoke for an ordinary bounded task unless model or cost guidance is requested.
+description: Choose the lowest-cost reliable model, reasoning effort, context strategy, and delegation route for substantial Codex work. Use before large plans or implementations, before delegation, at a material phase change, or when the user asks about model choice or cost. Do not invoke for an ordinary bounded task.
 ---
 
 # Model Router
@@ -8,6 +8,12 @@ description: Choose the lowest-cost reliable model, reasoning effort, context st
 Minimize total task cost while preserving the required result. Optimize the whole workflow, including retries, repeated context, tools, and subagents; do not optimize only the first model call.
 
 ## Route the task
+
+First resolve which models, reasoning levels, and delegation tools are available
+in the current host. Treat the tier names below as capability roles. Use the named
+models when available; otherwise map each role to the closest supported option
+and state the mapping only when it affects the user. Never stall an authorized
+task merely because a preferred model or delegation feature is unavailable.
 
 Choose the lowest tier that can reliably satisfy the task:
 
@@ -19,7 +25,8 @@ Choose the lowest tier that can reliably satisfy the task:
 
 Treat Terra medium as the default for this user's typical work. Do not select Sol merely because a task is long. Use `xhigh`, `ultra`, or `max` only for one bounded quality-critical decision or review with explicit success criteria; never use them as an extended implementation default.
 
-If these model names are unavailable, map Luna to the cheapest capable tier, Terra to the balanced production tier, and Sol to the frontier tier.
+Do not claim a model, rate, context limit, or tool is current without checking a
+current authoritative source when the choice materially depends on it.
 
 ## Apply the decision gates
 
@@ -49,7 +56,13 @@ Before a large or usage-sensitive task, emit one compact line:
 Route — Terra medium · projected 20k–40k input / 3k–6k output · ~2–4 credits · confidence: medium · uncertainty: repository breadth
 ```
 
-Do not add a routing line to ordinary bounded tasks. Classify projections as measured, calculated, or estimated. When exact rates or account usage matter, follow the `usage-advisor` skill; otherwise avoid telemetry calls made only to choose a route.
+Do not add a routing line to ordinary bounded tasks. When reporting a route, name
+the chosen model or capability tier, effort, context or delegation approach,
+projected input/output range for a large task, confidence, and main uncertainty.
+Classify projections as measured, calculated, or estimated. When exact rates or
+account usage matter, follow the `usage-advisor` skill; otherwise avoid telemetry
+calls made only to choose a route. Omit a credit estimate when no current rate is
+available rather than using a remembered value.
 
 ## Estimate comparative cost
 

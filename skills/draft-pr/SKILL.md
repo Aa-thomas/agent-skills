@@ -1,83 +1,67 @@
 ---
 name: draft-pr
-description: Draft an evidence-backed pull request title and structured body from the full Git branch diff against its target branch. Use when the user asks to write, prepare, improve, or review PR content before publishing.
+description: Draft or improve a pull request title and body from the complete branch diff and available evidence. Use when the user asks for PR copy, a PR description, or review-ready change notes. This skill drafts text; it does not publish, update, validate, or merge the PR.
 ---
 
 # Draft a Pull Request
 
-Draft a reviewable PR from the entire branch change. Do not publish or update a PR unless the user separately asks.
+Explain the concrete problem and resulting behavior so a reviewer can assess the
+whole branch without reconstructing the conversation. Return draft text only
+unless the user separately asks to publish or update it.
 
-## Establish the change set
+## Establish the change
 
-1. Resolve the target branch from the user, an existing PR, the tracked remote default, or repository conventions, in that order. State the selected target when it is not explicit.
-2. Inspect `git status --short`, the current branch, and commits since the merge base. Stop if the current branch is the selected target: an ordinary trunk-based PR needs a short-lived feature branch.
-3. Inspect `git diff --stat <target>...HEAD` and the full `git diff --find-renames <target>...HEAD`.
-4. Include every committed branch change, not merely the latest commit. Treat unstaged and untracked files as outside the PR diff and disclose relevant ones as warnings.
-5. Detect unrelated change groups. Recommend concrete split boundaries when the branch does not describe one reviewable product or architectural change.
+Resolve the target branch from the user, existing PR metadata, tracked remote
+default, then repository convention. Inspect the current branch, worktree state,
+commits since the merge base, and the complete three-dot diff including renames,
+binary changes, modes, and submodules where relevant.
 
-Use the branch diff as the source of truth for change claims. Use issues, design documents, commit messages, or user-provided context only when available and consistent with the diff.
-For branch creation, merge authorization, and post-merge verification, use
-`$trunk-based-delivery`.
+Treat committed branch content as PR scope. Mention relevant unstaged or untracked
+work as a warning rather than describing it as part of the PR. If there is no
+branch diff, the target cannot be resolved, or unrelated changes prevent one
+truthful explanation, stop with the specific problem and next action.
 
-## Gather verification evidence
+Use issues, specifications, commit messages, and user context only when they are
+available and agree with the diff. Never invent motivation or design rationale.
 
-Discover repository-prescribed test, lint, type-check, and build commands from its checked-in guidance. Run safe, proportionate checks when drafting a publishable PR unless the user requests a text-only draft. Record the exact command and outcome.
+## Gather evidence
 
-Treat a verification claim as supported only when:
+Follow checked-in repository guidance for required tests, linting, type checks,
+builds, and manual checks. Run safe, proportionate checks for a publishable draft
+unless the user asks for text only. Record each command, observed result, and the
+code state it covers.
 
-- the command ran during the current work and its result was observed; or
-- the user supplied specific evidence and the body labels it as user-supplied.
+A verification claim is supported only when it was observed during the current
+work or the user supplied specific evidence that is clearly labeled. The presence
+of tests is not a passing result. Distinguish a product failure from an unavailable
+tool or environment. Do not turn an unavailable check into a pass.
 
-Do not convert the presence of test files into a claim that tests passed. Mark checks that did not run as unchecked and explain why in `Evidence` or `Risks`.
+## Write for this repository
 
-## Write the title
+Use the repository's required PR template when one exists. Otherwise scale the
+body to the change:
 
-Use `<type>(<scope>): <imperative summary>` with one of:
+- Start with the concrete problem or requirement and the resulting behavior.
+- Explain material implementation or design decisions that a reviewer needs.
+- Report checks with exact commands and observed outcomes.
+- Include risks, limitations, or follow-up work only when they are real.
 
-`feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `build`, `ci`, or `perf`.
+A small, self-explanatory change may need one or two short paragraphs plus its
+validation. A complex change may need sections such as `Problem`, `Change`,
+`Design decisions`, `Verification`, `Evidence`, `Risks`, and `Follow-up work`.
+Do not add empty sections or generic checklists merely to fill a template.
 
-Choose the primary responsibility as the scope, keep the title at most 72 characters, and omit a trailing period. The title must summarize the full PR rather than one commit.
+Write the title as `<type>(<scope>): <imperative summary>` when that matches the
+repository convention. Otherwise follow the repository's format. Summarize the
+full branch, keep the title concise, and do not add an issue identifier that was
+not supplied by an authoritative source.
 
-## Write the body
+## Return the draft
 
-Use exactly these sections:
+Return the proposed title in a fenced text block, followed by the complete body
+in a Markdown code fence. After the draft, add only warnings that materially
+affect publication or review. Do not publish or update a PR as part of this skill.
 
-```markdown
-## Problem
-
-What limitation, failure, or requirement motivated this change?
-
-## Change
-
-What changed?
-
-## Design decisions
-
-Why was this implementation chosen?
-Which responsibilities remain outside this PR?
-
-## Verification
-
-- [ ] Tests added or updated
-- [ ] Full test suite passes
-- [ ] Type checking passes
-- [ ] Linting passes
-- [ ] Manual behavior verified
-
-## Evidence
-
-Commands, observed results, traces, screenshots, or benchmarks.
-
-## Risks
-
-What could regress?
-What assumptions does the change depend on?
-
-## Follow-up work
-
-What was intentionally left outside this PR?
-```
-
-Replace prompts with concise, concrete prose. Check a box only when evidence supports that exact statement. Use `None identified` rather than inventing risks or follow-up work. If the problem or a design rationale is not established by available artifacts, say so plainly or request the missing context; do not manufacture it.
-
-Return the proposed title in a text block followed by the complete Markdown body. Add warnings after the draft only when they materially affect publishing or review.
+For lifecycle work such as creating a branch, publishing, merging, or verifying
+the post-merge result, use `$trunk-based-delivery` when that larger workflow was
+requested.

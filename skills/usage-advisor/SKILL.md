@@ -19,6 +19,21 @@ Usage — weekly: 96% remaining · updated: Aug 28 9:32 AM EDT · resets: Aug 28
 
 Never substitute a remembered value, an earlier footer, or an instruction snapshot for the helper output.
 
+## Interface contracts
+
+- `scripts/footer.py` always writes exactly one footer line and exits zero. Fresh,
+  valid cache data produces measured values; missing, unreadable, malformed, stale,
+  or timezone-invalid data produces the explicit unavailable footer.
+- `scripts/inject_weekly.py` writes one `UserPromptSubmit` hook object for eligible
+  events and writes nothing for other hook events. It never calls telemetry.
+- `scripts/usage_advisor.py cached-weekly` writes JSON. It marks readable stale
+  data with `stale: true`; missing, unreadable, or malformed data returns
+  `classification: unavailable` and a nonzero exit.
+- `scripts/usage_advisor.py telemetry` reports account telemetry independently of
+  cache refresh. A cache is replaced only when the response contains the general
+  Codex 10,080-minute bucket; otherwise report that the cache was not updated and
+  preserve the previous file.
+
 ## Large-task projection
 
 Forecast billable input and output across all expected model calls. State the cached-input assumption, credit range, confidence, and main uncertainty. Prefer current official rates; use `references/rates.json` only as a dated fallback.

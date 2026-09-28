@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>Why a stale edit is rejected · Explain Code</title>
+  <style>
+    :root {
+      --paper: #faf9f5; --ink: #202c31; --muted: #52636a;
+      --line: #cbd3cf; --accent: #17665d; --wash: #edf2ee; --error: #8a312b;
+      font: 105%/1.7 system-ui, sans-serif;
+      color: var(--ink); background: var(--paper);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: var(--accent); text-underline-offset: .18em; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    .skip { position: absolute; left: 1rem; top: -5rem; padding: .5rem; background: var(--paper); }
+    .skip:focus { top: 1rem; }
+    .page { max-width: 78rem; margin: auto; padding: 3.5rem 2.5rem; }
+    header { max-width: 58rem; padding-bottom: 2.5rem; }
+    h1, h2 { font-family: Georgia, serif; font-weight: 500; line-height: 1.15; text-wrap: balance; }
+    h1 { font-size: clamp(2.5rem, 5vw, 4.4rem); margin: 0 0 1.25rem; letter-spacing: -.025em; }
+    h2 { font-size: 2rem; margin: 0 0 1.2rem; }
+    p, li { max-width: 72ch; }
+    p { margin: 0 0 1.2rem; }
+    .lead { font-size: 1.3rem; line-height: 1.5; }
+    .evidence { color: var(--muted); font-size: .95rem; }
+    .layout { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 3.5rem; }
+    nav { border-top: 1px solid var(--line); padding-top: 1rem; }
+    nav a { display: block; padding: .45rem 0; line-height: 1.4; }
+    main { min-width: 0; max-width: 52rem; }
+    section { border-top: 1px solid var(--line); padding: 1.7rem 0 2.5rem; scroll-margin-top: 1rem; }
+    ol, ul { padding-left: 1.4rem; }
+    li { margin-bottom: .6rem; }
+    pre { overflow-x: auto; white-space: pre; padding: 1.2rem; background: var(--wash); line-height: 1.6; }
+    code { font-family: ui-monospace, monospace; font-size: .9em; }
+    .table-wrap { max-width: 100%; overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; text-align: left; }
+    th, td { padding: .9rem .65rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-weight: 650; }
+    th:first-child, td:first-child { padding-left: 0; }
+    fieldset { border: 0; padding: 0; margin: 1.5rem 0; min-width: 0; }
+    legend { font-weight: 650; padding: 0; margin-bottom: .8rem; }
+    label { display: flex; align-items: flex-start; gap: .65rem; padding: .7rem 0; cursor: pointer; }
+    input { margin-top: .45rem; accent-color: var(--accent); flex-shrink: 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+    button { min-height: 44px; padding: .6rem 1rem; font: inherit; cursor: pointer; border: 1px solid var(--accent); background: var(--accent); color: white; border-radius: .25rem; }
+    button[type="reset"] { color: var(--accent); background: transparent; }
+    .feedback { min-height: 1.7em; margin-top: 1rem; }
+    .feedback[data-result="incorrect"] { color: var(--error); }
+    details { margin: 1.4rem 0; }
+    summary { cursor: pointer; color: var(--accent); padding: .4rem 0; }
+    details p { margin-top: .75rem; }
+    footer { color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+    @media (max-width: 760px) {
+      .page { padding: 2rem 1.1rem; }
+      header { padding-bottom: 1.5rem; }
+      .layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+      nav { display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; }
+      h2 { font-size: 1.7rem; }
+      th, td { min-width: 9rem; }
+    }
+    @media print {
+      :root { font-size: 11pt; color: black; background: white; }
+      .page { padding: 0; }
+      .layout { display: block; }
+      nav, .skip, .actions { display: none; }
+      main, header { max-width: none; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      .table-wrap { overflow: visible; }
+      section { padding-bottom: 1rem; }
+      tr, pre, fieldset { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#walkthrough">Skip to explanation</a>
+  <div class="page">
+    <header>
+      <h1>Why a stale edit is rejected</h1>
+      <p class="lead">A version check at the save boundary prevents an older edit from replacing a newer one.</p>
+      <p class="evidence"><strong>Illustrative example.</strong> This document uses a made-up command. No application or runtime was inspected. When using this template, replace the example and record the actual repository, base/head or local snapshot, and checks.</p>
+    </header>
+    <div class="layout">
+      <nav aria-label="Explanation sections">
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#impact">Change-impact map</a>
+        <a href="#alternatives">Important alternatives</a>
+        <a href="#check">Explanation check</a>
+        <a href="#question">Optional question</a>
+        <a href="#sources">Sources and limits</a>
+      </nav>
+      <main>
+        <section id="walkthrough">
+          <h2>The version travels with the edit</h2>
+          <p>Imagine two editors opening version 4 of a record. Each sends an edit with <code>expected_version = 4</code>. Accepting both without checking the stored version could silently replace the first person's work.</p>
+          <ol>
+            <li>The first edit reaches the store. Its expected version matches version 4, so the store accepts the write and advances to version 5.</li>
+            <li>The second edit arrives with version 4. Its conditional write no longer matches, so it cannot overwrite version 5.</li>
+            <li>The application returns a conflict that lets the editor reload or reconcile the newer content.</li>
+          </ol>
+          <p>The important boundary is the write itself. A check against an earlier loaded snapshot would leave room for another write between checking and saving.</p>
+          <pre tabindex="0" aria-label="Illustrative conditional write"><code>UPDATE records
+SET value = :value, version = version + 1
+WHERE id = :id AND version = :expected_version;
+
+-- No matched row means this write was not accepted.
+-- The application must distinguish a missing record from a stale version.</code></pre>
+          <p class="evidence">Illustrative SQL only. This sketch omits record creation, authorization, transaction configuration, and retry handling. It is not an inspected application implementation or evidence of a working store.</p>
+        </section>
+        <section id="impact">
+          <h2>Change-impact map</h2>
+          <p>Suppose the next requirement is a clearer conflict message. These are the boundaries to consider; changing the message alone does not require changing the version rule.</p>
+          <div class="table-wrap" role="region" tabindex="0" aria-label="Illustrative change-impact map">
+            <table>
+              <thead><tr><th scope="col">Change point</th><th scope="col">Boundary and reason</th><th scope="col">Protection or gap</th></tr></thead>
+              <tbody>
+                <tr><td>Edit: conflict response</td><td>Keep the error contract stable for callers, or update them together.</td><td>Inspect the actual contract and caller tests.</td></tr>
+                <tr><td>Edit: editor message</td><td>Explain the conflict and give a useful next action.</td><td>Check approved copy and the real interaction.</td></tr>
+                <tr><td>Verify: conditional write</td><td>Confirm the new presentation still depends on the same guarded save.</td><td>A real-store conflict test is needed for runtime proof.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="evidence">These are proposed connections in a fictional example. Replace them with the affected symbols, source links, and observed test status for the actual change.</p>
+        </section>
+        <section id="alternatives">
+          <h2>Important alternatives</h2>
+          <p><strong>Illustrative analysis, not recorded author intent.</strong> A conditional write protects an earlier edit but makes conflicts visible to the user. That adds work to the interface and may require a reconciliation flow.</p>
+          <p>Last-write-wins is simpler when replacing an older value is an accepted product rule—for example, updating a disposable preference. It would be a poor fit when silently losing another person's edits breaks the editing contract. The actual product requirement should decide.</p>
+        </section>
+        <section id="check">
+          <h2>Explanation check</h2>
+          <p>Test the explanation's strongest claims against cases that could make them false.</p>
+          <div class="table-wrap" role="region" tabindex="0" aria-label="Explanation claims and counterexamples">
+            <table>
+              <thead><tr><th scope="col">Claim</th><th scope="col">Counterexample</th><th scope="col">Evidence needed or limit</th></tr></thead>
+              <tbody>
+                <tr><td>An older edit cannot replace a newer one.</td><td>Both requests validate version 4 before either saves.</td><td>Inspect the conditional store write and a real-store concurrency test. An earlier check alone is insufficient.</td></tr>
+                <tr><td>A retry cannot duplicate an effect.</td><td>The write succeeds, but its response is lost.</td><td>This version example does not establish that claim. Inspect durable operation identity and retry reconciliation separately.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="evidence">No application tests were run for this example. It explains a mechanism; it provides no storage, deployment, or learner evidence.</p>
+        </section>
+        <section id="question">
+          <h2>Try one prediction</h2>
+          <p>This question is optional. It helps check the mental model and does not record a score.</p>
+          <form data-question>
+            <fieldset>
+              <legend>Both editors loaded version 4. The first save creates version 5. Where must the second edit's expected version be checked?</legend>
+              <label><input type="radio" name="version-check" value="load"> <span>Against the earlier snapshot, when the edit request is loaded.</span></label>
+              <label><input type="radio" name="version-check" value="render"> <span>Against the response data, when the updated view is rendered.</span></label>
+              <label><input type="radio" name="version-check" value="commit" data-correct="true"> <span>Against the stored version, when the store accepts the write.</span></label>
+            </fieldset>
+            <div class="actions">
+              <button type="submit">Check reasoning</button>
+              <button type="reset">Reset question</button>
+            </div>
+            <p class="feedback" role="status" aria-live="polite" data-feedback
+              data-correct-feedback="Yes. The condition must still hold when the store accepts the write. Checking only an earlier snapshot leaves a gap for another edit."
+              data-incorrect-feedback="Consider what can change between loading and saving. Another write can advance the stored version, so acceptance must depend on the version at the write boundary."></p>
+          </form>
+          <details>
+            <summary>Reveal the reasoning without answering</summary>
+            <p>The store must check the expected version as part of accepting the write. Checking only before the write leaves a gap where another edit can change the record. Rendering happens too late to protect it.</p>
+          </details>
+          <noscript><p>Interactive feedback needs JavaScript. The reasoning above remains available without it.</p></noscript>
+        </section>
+        <section id="sources">
+          <h2>Sources and limits</h2>
+          <p><strong>This is an illustration, not a report on an inspected repository.</strong> Replace this section with revision links, the relevant contracts, the checks actually run, and any unresolved assumptions. Keep proposed work separate from implemented behavior.</p>
+          <p>The explanation format is inspired by Geoffrey Litt's <a href="https://www.geoffreylitt.com/2026/07/02/understanding-is-the-new-bottleneck">Understanding is the new bottleneck</a>. That article is not evidence for this fictional storage example.</p>
+        </section>
+      </main>
+    </div>
+    <footer>Explain Code · Understand the change. Know where to take it next.</footer>
+  </div>
+  <script>
+    for (const form of document.querySelectorAll('[data-question]')) {
+      const feedback = form.querySelector('[data-feedback]');
+      const clearFeedback = () => {
+        feedback.textContent = '';
+        delete feedback.dataset.result;
+      };
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const selected = form.querySelector('input[type="radio"]:checked');
+        if (!selected) {
+          feedback.textContent = 'Choose an answer, or reveal the reasoning below.';
+          return;
+        }
+        const correct = selected.dataset.correct === 'true';
+        feedback.dataset.result = correct ? 'correct' : 'incorrect';
+        feedback.textContent = correct
+          ? feedback.dataset.correctFeedback
+          : feedback.dataset.incorrectFeedback;
+      });
+      form.addEventListener('change', clearFeedback);
+      form.addEventListener('reset', clearFeedback);
+    }
+  </script>
+</body>
+</html>
