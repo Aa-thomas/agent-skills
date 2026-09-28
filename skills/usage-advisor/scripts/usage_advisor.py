@@ -270,7 +270,7 @@ def command_cached_weekly(args: argparse.Namespace) -> int:
         payload["cache_file"] = str(path)
         emit(payload)
         return 0
-    except (FileNotFoundError, KeyError, ValueError, json.JSONDecodeError) as exc:
+    except (FileNotFoundError, KeyError, ValueError, json.JSONDecodeError, OSError) as exc:
         emit({"available": False, "classification": "unavailable", "cache_file": str(path), "error": str(exc)})
         return 1
 
@@ -385,10 +385,14 @@ def command_telemetry(args: argparse.Namespace) -> int:
             weekly = select_general_weekly(summarized_limits)
             if weekly is not None:
                 write_weekly_cache(args.cache_file, weekly)
+                output["weekly_cache_updated"] = True
                 output["cache_file"] = str(Path(args.cache_file).expanduser())
                 if args.agents_file:
                     update_agents_usage(args.agents_file, weekly)
                     output["agents_file"] = str(Path(args.agents_file).expanduser())
+            else:
+                output["weekly_cache_updated"] = False
+                output["weekly_cache_reason"] = "general_codex_weekly_bucket_unavailable"
         emit(output)
         return 0 if output["available"] else 1
     finally:
