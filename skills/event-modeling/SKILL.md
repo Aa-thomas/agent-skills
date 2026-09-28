@@ -46,9 +46,15 @@ scenario names one command or read model and that meaningful rejection, failure,
 and concurrency cases agree with the proposed contract. Render and inspect the
 visual artifact; syntax or rendering success alone cannot prove the model correct.
 
-Deliver the model and editable source, data contracts, scenario IDs, ownership,
-and unresolved decisions. When implementation is in scope, connect scenarios to
-real code and test locations and report checks actually run. For a migration,
-identify the current authority and shared behavior cases before cutover. Update
-models and affected explanations alongside behavior changes; reuse the same
-model rather than creating a competing implementation document.
+Deliver one handoff package containing:
+
+- the rendered model and editable source that produced it;
+- commands, events, read models, field origins, and ownership;
+- stable scenario IDs with success and material rejection or failure examples;
+- unresolved decisions, their affected slices, and whether they block work; and
+- when implementation is in scope, real code and test locations for each slice.
+
+Do not label an unresolved slice implementation-ready. For a migration, identify
+the current authority and shared behavior cases before cutover. Update models and
+affected explanations alongside behavior changes; reuse the same model rather
+than creating a competing implementation document.

@@ -16,10 +16,15 @@ and verification without reconstructing hidden conventions.
 - **Adopt:** establish repository rules and the smallest useful checks. Read
   [adoption and enforcement](references/adoption.md), then adapt the
   [policy template](assets/engineering-policy.md) into existing project docs.
+  Finish with the adopted rules, configured enforcement, representative passing
+  and failing proof, and anything that remains proposed or externally gated.
 - **Apply:** follow an adopted policy while implementing or reviewing the
   requested change. Read only the affected feature's rules and dependencies.
-- **Audit or plan:** inspect and report evidence; do not edit application code
-  or install tools when the request is read-only.
+  Finish with the owning boundary, behavior changed, checks observed, and any
+  affected model or explanation.
+- **Audit or plan:** inspect and report prioritized findings with file or symbol
+  evidence, impact, and a concrete next action. Do not edit application code or
+  install tools when the request is read-only, and label sampled coverage.
 
 Read applicable repository instructions first. Preserve their delivery,
 authorization, and design requirements. Installing this skill makes guidance
@@ -201,11 +206,11 @@ in proportion to the change; they are not additional mandatory tooling.
 
 ## Finish concisely
 
-Report what changed or was found, the owning boundary, the affected model and
-scenarios when applicable, checks actually run and their outcomes, and any
-material exception or unresolved decision. For an audit,
-prioritize a few findings with file/symbol evidence and a concrete next action;
-label sampled coverage and do not claim a full audit from a few large files.
+Return the result promised by the selected mode. Report what changed or was
+found, the owning boundary, the affected model and scenarios when applicable,
+checks actually run and their outcomes, and any material exception or unresolved
+decision. Do not turn an Apply result into a repository-wide audit or represent
+an Audit finding as an implemented change.
 
 Separate installed guidance, adopted policy, configured checks, observed passing
 checks, and required remote merge checks. None implies the next automatically.
