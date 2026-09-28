@@ -1,159 +1,102 @@
 ---
 name: to-tickets
-description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker (edges as text in one file per ticket locally, or native blocking links on a real tracker).
+description: Turn an approved plan, specification, issue, or conversation into grounded implementation tickets with explicit outcomes, contracts, failure checks, dependencies, and open decisions. Use when the user explicitly invokes $to-tickets to draft or publish a ticket breakdown. Draft first; publish only when the destination and breakdown are authorized.
 ---
 
 # To Tickets
 
-Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it.
+Turn a defined change into narrow, reviewable tickets that another agent can
+implement without inventing product rules or rediscovering the repository.
 
-The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+## Establish scope and destination
 
-## Process
+Read the supplied plan, specification, issue, and relevant conversation context.
+When a referenced issue or document is authoritative, read its full current body
+and relevant comments before drafting.
 
-### 1. Gather context
+Resolve the ticket destination from project instructions, an existing tracker, or
+the user's request. If no destination is configured, draft the breakdown in the
+response and identify the missing destination; do not depend on an unavailable
+setup command or create a substitute tracker.
 
-Work from whatever is already in the conversation context. If the user passes a reference (a spec path, an issue number or URL) as an argument, fetch it and read its full body and comments.
+Drafting does not authorize publication. Reuse approval already given for the
+same breakdown and destination, but obtain the user's decision before publishing
+when either is not authorized. Do not close or modify a parent issue.
 
-### 2. Check existing implementation and contracts
+## Ground the tickets in the repository
 
-Inspect the relevant existing implementation before naming components, modules, interfaces, or invariants to reuse. Reuse previously verified context when still current. If access is unavailable, explicitly record what remains unverified; do not invent existing modules. Ticket titles and descriptions should use the project's domain glossary vocabulary, and respect ADRs in the area you're touching.
+Inspect the relevant implementation, tests, domain terms, ADRs, and existing
+interfaces before naming reuse candidates or invariants. Distinguish:
 
-Look for opportunities to prefactor the code to make the implementation easier. "Make the change easy, then make the easy change."
+- verified existing code and its responsibility;
+- work that an earlier dependency ticket will introduce;
+- genuinely new components; and
+- anything that remains unverified because source access is unavailable.
 
-### Required content in every ticket
+Do not invent filenames, components, product decisions, guarantees, or evidence.
+Preserve the source plan's scope, acceptance criteria, approval gates, and
+blocking decisions unless the user authorizes a change.
 
-Every ticket, including local files, tracker issues, and rewrites of existing tickets, must include:
+## Build implementable slices
 
-1. **Expected behaviour and explicit acceptance criteria.** Describe the learner/user or system outcome and observable pass/fail criteria. Include a concrete demonstration when useful.
-2. **Relevant existing components or modules to reuse.** Name verified reuse candidates and their responsibility. Distinguish existing code from work supplied by a dependency and genuinely new work. If none exist, say so; if not inspected, say unverified.
-3. **Interfaces and rules that must remain true.** State the relevant data/API contracts, identity, compatibility, authorization, lifecycle, and other invariants. Include only those material to the slice.
-4. **Important failure cases and how to verify them.** Pair concrete failures with an observable recovery or rejection outcome and the appropriate test or manual verification seam. Avoid tests that merely mirror implementation.
-5. **Dependencies and decisions still unresolved.** List real blocking tickets and external gates separately from open implementation decisions. State whether a decision blocks implementation, who/what must resolve it when known, and "None known" only when supported.
+Prefer tracer-bullet tickets: each delivers a narrow, complete, demonstrable path
+through the layers it actually needs. Size a ticket for one fresh implementation
+context and give it only dependencies that truly prevent it from starting.
 
-Do not fill gaps with invented decisions. Preserve scope, acceptance criteria, dependency edges, and approval gates when rewriting existing tickets unless the user authorizes a change. A rewrite or design reference does not approve a gated proposal. Do not label a ticket ready to implement while an unresolved required product decision still blocks it.
+Use a separate prefactor ticket only when it makes a later behavior change safer
+or materially simpler. For a wide mechanical migration that cannot land green as
+vertical slices, use expand–migrate–contract: introduce the compatible form,
+migrate callers in independently verifiable batches, then remove the old form
+after every caller moves.
 
-### 3. Draft vertical slices
+Every ticket must contain:
 
-Break the work into **tracer bullet** tickets.
+1. **Expected behavior and acceptance criteria.** State an observable result and
+   pass/fail conditions, with a concrete demonstration when useful.
+2. **Existing components or modules to reuse.** Name inspected owners and their
+   responsibilities; label dependency-delivered, new, and unverified work.
+3. **Interfaces and invariants.** Include only material data, API, identity,
+   authorization, compatibility, lifecycle, and ownership rules.
+4. **Failure cases and verification.** Pair important failures with observable
+   rejection or recovery and a meaningful test or manual seam.
+5. **Dependencies and unresolved decisions.** Separate ticket blockers, external
+   gates, and open decisions. State whether each decision blocks implementation.
 
-<vertical-slice-rules>
+Use `ready-for-agent` only when required decisions and gates are resolved.
+Otherwise retain `blocked` or `proposed`; do not turn uncertainty into readiness.
 
-- Each slice cuts a narrow but COMPLETE path through every layer (schema, API, UI, tests): vertical, NOT a horizontal slice of one layer
-- A completed slice is demoable or verifiable on its own
-- Each slice is sized to fit in a single fresh context window
-- Any prefactoring should be done first
+## Review the breakdown
 
-</vertical-slice-rules>
+Before publication, return a numbered proposal. For each ticket show:
 
-Give each ticket its **blocking edges**: the other tickets that must complete before it can start. A ticket with no blockers can start immediately.
+- title;
+- blockers or “None”;
+- the end-to-end result it delivers; and
+- status when a gate or unresolved decision affects readiness.
 
-**Wide refactors are the exception to vertical slicing.** A **wide refactor** is one mechanical change (rename a column, retype a shared symbol) whose **blast radius** fans across the whole codebase, so a single edit breaks thousands of call sites at once and no vertical slice can land green. Don't force it into a tracer bullet; sequence it as **expand–contract**. First expand: add the new form beside the old so nothing breaks. Then migrate the call sites over in batches sized by blast radius (per package, per directory), each batch its own ticket blocked by the expand, keeping CI green batch to batch because the old form still exists. Finally contract: delete the old form once no caller remains, in a ticket blocked by every migrate batch. When even the batches can't stay green alone, keep the sequence but let them share an integration branch that all block a final integrate-and-verify ticket; green is promised only there.
+Ask for changes only when the breakdown, dependencies, or unresolved authority
+needs the user's judgment. Reuse prior approval when a rewrite leaves those
+material properties unchanged.
 
-### 4. Quiz the user
+## Publish safely
 
-Present the proposed breakdown as a numbered list. For each ticket, show:
+When publication is authorized, read
+[ticket formats and publication rules](references/ticket-formats.md). Publish
+blockers first so later tickets can use real identifiers. Use native dependency
+relationships where supported and explicit text links otherwise.
 
-- **Title**: short descriptive name
-- **Blocked by**: which other tickets (if any) must complete first
-- **What it delivers**: the end-to-end behaviour this ticket makes work
+Before creating tickets, search the destination for the approved titles or a
+stable source reference to avoid duplicates. If a write times out or returns an
+uncertain result, read back the destination before retrying. Stop when the exact
+publication state cannot be established.
 
-Ask the user:
-
-- Does the granularity feel right? (too coarse / too fine)
-- Are the blocking edges correct: does each ticket only depend on tickets that genuinely gate it?
-- Should any tickets be merged or split further?
-
-Iterate until the user approves the breakdown. Reuse approval already given in the conversation; an authorized rewrite of an approved breakdown does not require another quiz unless scope or blocking edges materially change.
-
-### 5. Publish the tickets to the configured tracker
-
-Publish the approved tickets. **How** depends on the tracker `/setup-matt-pocock-skills` configured; the tickets are the same either way, only the shape of the blocking edges changes:
-
-- **Local files** → write one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below: one ticket per file, never a single combined file.
-- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use the platform's native blocking / sub-issue relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the `ready-for-agent` triage label only when the required decisions and gates permit it; retain explicit blocked/proposed status otherwise.
-
-Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
-
-Do NOT close or modify any parent issue.
-
-<local-ticket-template>
-
-# <NN>: <Ticket title>
-
-**Status:** ready-for-agent | blocked | proposed (choose based on actual gates)
-
-## Expected behaviour
-
-The end-to-end outcome from the user's perspective. Include a concrete demonstration where useful.
-
-## Acceptance criteria
-
-- [ ] Observable criterion 1
-- [ ] Observable criterion 2
-
-## Existing components and modules to reuse
-
-- Verified component/module and responsibility; distinguish dependency-delivered and new work.
-
-## Interfaces and invariants
-
-- Contract or rule that must remain true.
-
-## Failure cases and verification
-
-- Failure scenario → expected recovery/rejection → verification method.
-
-## Blocked by
-
-- Blocking ticket references and external gates, or "None (can start immediately)".
-
-## Unresolved decisions
-
-- Decision, whether it blocks implementation, and resolution needed; or "None known".
-
-</local-ticket-template>
-
-<issue-template>
-
-## Parent
-
-Reference to the source issue, if applicable.
-
-## Expected behaviour
-
-The end-to-end outcome from the user's perspective. Include a concrete demonstration where useful.
-
-## Acceptance criteria
-
-- [ ] Observable criterion 1
-- [ ] Observable criterion 2
-
-## Existing components and modules to reuse
-
-- Verified component/module and responsibility; distinguish dependency-delivered and new work.
-
-## Interfaces and invariants
-
-- Contract or rule that must remain true.
-
-## Failure cases and verification
-
-- Failure scenario → expected recovery/rejection → verification method.
-
-## Blocked by
-
-- Blocking ticket references and external gates, or "None (can start immediately)".
-
-## Unresolved decisions
-
-- Decision, whether it blocks implementation, and resolution needed; or "None known".
-
-</issue-template>
-
-Prefer stable component/module names and verified source links for reuse and contracts; do not prescribe speculative file paths or a layer-by-layer implementation plan. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo, just the important bits.
-
+Finish with created identifiers and links, dependency edges, status labels, and
+anything left as a draft or blocked decision. Do not claim publication from local
+files, a preview, or an unconfirmed response.
 
 ## Attribution
 
-Adapted from [Matt Pocock's to-tickets](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md), upstream file revision `e868c831fcfb1e124e010bcdf84a429ec879160f`, under the accompanying MIT license. This personal adaptation requires the five ticket sections above. Explicit invocation is retained through `agents/openai.yaml`.
+Adapted from [Matt Pocock's to-tickets](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md),
+upstream file revision `e868c831fcfb1e124e010bcdf84a429ec879160f`,
+under the accompanying MIT license. This adaptation retains explicit invocation
+and requires the five ticket content areas above.
