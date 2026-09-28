@@ -11,6 +11,10 @@
 3. Map responsibilities with existing paths: owner, accepted state, public
    operations, permitted dependencies, and forbidden cross-boundary access.
    Explain conflicting meanings using separate contexts and explicit contracts.
+   Locate existing Event Models and feature specifications. For workflow work,
+   follow the [Event Modeling method](event-modeling.md), retaining one
+   authoritative visual model and its editable source. Adopting this policy does
+   not require retroactively modeling the entire repository.
 4. Identify the smallest useful enforcement gap. Reuse a working linter, type
    checker, or test runner. Add a tool only when a concrete rule needs it and the
    maintenance cost is justified. Do not install every tool in the language guide.
@@ -42,6 +46,7 @@ should still be understandable by a human or an agent without skill support.
 | Types at public interfaces | Configured type checker with inspected source coverage |
 | Excessive branching or nesting | Linter/analyzer with a measured baseline |
 | Domain invariant and rejection semantics | Focused behavioral tests |
+| Event Model completeness and implementation agreement | Visual/data review plus tests for the modeled command/view scenarios |
 | API compatibility across runtimes | Shared wire fixtures and contract tests |
 | Human comprehension and useful abstraction | Review of a representative operation |
 
@@ -49,6 +54,11 @@ For each enforced rule record its command, configuration, covered paths,
 baseline or exceptions, and the CI job that runs it. A successful command over
 an empty or irrelevant file set proves nothing. Include new source directories
 and check CI path filters, not just the tool's configuration.
+
+A renderer or link checker can validate an artifact's structure. It cannot prove
+that its events, information flow, or business decisions match the implementation.
+Keep that review explicit; do not report semantic model validation as a CI check
+unless a real check with that coverage has been configured and exercised.
 
 Make failures actionable: identify the rule, affected location, why the boundary
 matters, and an allowed correction or policy link. Use the existing tool's rule

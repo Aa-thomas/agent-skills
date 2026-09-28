@@ -31,6 +31,26 @@ Consequential decisions and accepted limitations: {{existing record or brief rat
 Draft/accepted/derived state ownership: {{only the distinctions this project uses}}.
 Retries, conflicts, and failure semantics: {{relevant operations and policy}}.
 
+## Event Modeling
+
+Authoritative models and editable sources: {{existing feature specifications / model paths}}.
+Rendering and review: {{existing diagram tool / export process; no new tool required}}.
+
+Before implementing a new or changed business workflow, create or update its
+visual Event Model: discover events, order the timeline, add screens or system
+actors, connect commands and read models, group ownership, and specify scenarios.
+Show concrete data and the four patterns where used: state change, information
+display, external translation, and automation. Trace each modeled field to its
+source and destination. A summary table alone is insufficient.
+
+Associate each scenario with one command or read model. Cover meaningful
+rejection and failure cases; identify relevant retry, concurrency, and partial
+completion behavior. Link implementation slices and tests to these scenarios.
+Record unknown product decisions explicitly and preserve existing review gates.
+Update the model and all affected explanations with the implementation. Reuse
+existing models for changes that preserve behavior; do not require new diagrams
+for unrelated mechanical edits. Modeling does not require event sourcing.
+
 ## Checks and complexity budget
 
 | Rule | Command / configuration | Covered paths | Enforcement |
@@ -48,8 +68,8 @@ Do not weaken scope, limits, or baselines to make a feature pass its checks.
 
 Document public contracts and non-obvious reasoning without narrating syntax.
 Trace code and contract changes through callers, tests, other implementations,
-and shared documentation. Update or remove inaccurate comments and docstrings
-anywhere affected by the change, including obsolete TODOs and workaround notes.
+event models, and shared documentation. Update or remove inaccurate comments and
+docstrings anywhere affected by the change, including obsolete TODOs and workaround notes.
 Maintain generated documentation at its source. Resolve code/comment conflicts
 against the intended contract; do not hide a regression by changing the prose.
 
@@ -63,4 +83,5 @@ Cutover, rollback, and old-code retirement: {{explicit conditions}}.
 
 Describe the changed behavior and owning boundary. Give checks actually run and
 their outcomes. Identify material exceptions, missing verification, and remaining
-decisions. Keep the explanation proportional to the change.
+decisions. Link the affected model and scenarios when applicable. Keep the
+explanation proportional to the change.
