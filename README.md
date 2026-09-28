@@ -41,7 +41,7 @@ Clear Code and remove only that old custom skill after checking for local change
 do not delete an unrelated or upstream skill with the same name.
 
 Install em as a development tool when adopting modeling in a repository. For
-example, `npm install --save-dev --save-exact @milehimikey/em@1.13.0` pins the
+example, `npm install --save-dev --save-exact --include=dev @milehimikey/em@1.13.0` pins the
 version verified for this adoption. Other stacks can use a small tooling package
 or a documented pinned CLI installation. Record the version, model directory,
 setup, validation, and render commands in the project's engineering policy.
