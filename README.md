@@ -13,6 +13,10 @@ Reusable skills for maintainable code, careful delivery, model routing, and usag
 - `usage-advisor` — track, explain, and forecast Codex usage.
 - `model-router` — choose models and reasoning effort by cost and risk.
 
+- `to-tickets` — turn approved plans into vertical slices with explicit outcomes,
+  reuse, invariants, failure verification, dependencies, and open decisions;
+  adapted from Matt Pocock.
+
 ## Install
 
 Copy the complete skill folders you want into your agent's skills directory.
