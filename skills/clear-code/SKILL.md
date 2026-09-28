@@ -58,19 +58,39 @@ For example, order capture owns what was ordered; fulfillment owns shipment
 progress. An order update should use their contract, not mutate shipment internals.
 A small application can implement both responsibilities in ordinary modules.
 
-## Model behavior with Event Modeling
+## Model behavior with em
 
-Before implementing a new or changed business workflow, use the companion
-[$event-modeling](../event-modeling/SKILL.md) skill to create or update its actual
-Event Model. This includes changes to reads, permissions, stored state, and
-external effects. Implement against its command/view scenarios and keep the
-model accurate wherever behavior changes. Reuse the applicable model for
-behavior-preserving work; unrelated mechanical edits need no new model.
+Before implementing a new or changed business workflow, use
+[em](https://github.com/milehimikey/em) (`@milehimikey/em`) to create or update its
+Event Model. This includes reads, permissions, stored state, and external effects.
+Follow the upstream [modeling workflow](https://github.com/milehimikey/em/blob/main/docs/ai-workflow.md)
+and method for the installed version; em owns the notation and tooling, while
+Clear Code owns implementation quality. No separate custom modeling skill is needed.
+Agents can run the CLI directly and read the package's
+`.claude/skills/event-modeling-shared/reference/` method and notation files without
+installing its Claude skill bundle.
 
-Install both skills together. Event Modeling owns the method and visual examples;
-Clear Code owns implementation quality and verification. If the companion skill
-is unavailable, report the missing dependency before modeling-dependent work;
-do not replace the required method with a summary or duplicate it here.
+Keep the editable `.em` source and linked command/view scenarios in the target
+repository. Use its existing specifications and domain terms; distinguish current
+behavior, proposed behavior, and unanswered questions. Resolve consequential unknowns
+with the domain owner before dependent implementation. Model the affected journey
+with actors, commands, events, views, and concrete data. Declare fields on modeled
+commands, events, and views before implementation so field checks can run.
+Identify the rule owner, meaningful failure/retry/concurrency cases, and code/test
+locations. Modeling does not require event sourcing or a service per diagram box.
+
+Use the repository's pinned em command to validate and render the changed model;
+inspect the diagram and review warnings. Structural checks cannot prove business
+correctness or code/model agreement. Implement against the scenarios and update
+all affected explanations with behavior changes. Reuse models for behavior-preserving
+work; unrelated mechanical edits need no new model.
+
+Start with modeling, rendering, and validation. Adopt em's optional skill bundle,
+review/sign-off lifecycle, conformance reports, or MCP server only when the project
+chooses them. Preserve existing project authorization and delivery rules. During
+adoption, record the tool version, model location, setup, and check commands in the
+project policy. If required tooling is missing, report it and complete authorized
+setup before dependent work; do not claim validation from an unavailable tool.
 
 ## Make the implementation easy to follow
 

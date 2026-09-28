@@ -4,8 +4,6 @@ Reusable skills for maintainable code, careful delivery, model routing, and usag
 
 - `clear-code` — adapt maintainability rules, practical DDD boundaries,
   complexity review, and enforcement to a repository.
-- `event-modeling` — create and review visual Event Models with concrete data,
-  ownership, and command/view scenarios; usable independently for planning.
 - `explain-code` — understand a change through its behavior, change-impact map,
   important alternatives, and an explanation checked against the evidence.
 - `trunk-based-delivery` — deliver a small change through a short-lived branch.
@@ -22,26 +20,33 @@ For current Codex, use `~/.agents/skills` for personal skills, or `.agents/skill
 inside the target repository for a checked-in project skill. See the
 [official skills guidance](https://learn.chatgpt.com/docs/customization/overview#skills).
 
-Install `clear-code` with its `event-modeling` companion. Clear Code requires the
-companion for business-workflow modeling; Event Modeling can also be installed
-and used on its own. Installing one folder does not install the other.
-
-For example, from this repository, install both for personal use:
+For example, from this repository, install Clear Code for personal use:
 
 ```sh
 mkdir -p "$HOME/.agents/skills"
 # Review existing copies before replacing them.
-for skill_name in clear-code event-modeling; do
-  test -e "$HOME/.agents/skills/$skill_name" ||
-    cp -R "skills/$skill_name" "$HOME/.agents/skills/"
-done
+test -e "$HOME/.agents/skills/clear-code" ||
+  cp -R skills/clear-code "$HOME/.agents/skills/"
 ```
 
-For a repository such as Evoke, copy both skill folders into its `.agents/skills/`
-directory, including their `agents`, `references`, and `assets` folders. Keep the
-folders as siblings so their links resolve. Review existing copies before
-replacing them. Record the source commit and update the pair together so later
-changes can be reviewed.
+For project-local installation, copy the complete `clear-code` folder into the
+repository's `.agents/skills/` directory. Record the source commit when vendoring
+it. For personal automatic use, add a short hook to your global `AGENTS.md` to
+apply Clear Code before coding. Each repository keeps its own engineering policy;
+the global hook does not copy Evoke's domain rules into another project.
+
+Clear Code uses [em](https://github.com/milehimikey/em) for Event Modeling. The
+former custom `event-modeling` skill has been retired. When upgrading, update
+Clear Code and remove only that old custom skill after checking for local changes;
+do not delete an unrelated or upstream skill with the same name.
+
+Install em as a development tool when adopting modeling in a repository. For
+example, `npm install --save-dev --save-exact --include=dev @milehimikey/em@1.13.0` pins the
+version verified for this adoption. Other stacks can use a small tooling package
+or a documented pinned CLI installation. Record the version, model directory,
+setup, validation, and render commands in the project's engineering policy.
+Future projects inherit the shared guidance, not an automatic installation or
+CI setup. Existing working models are migrated only when their workflow changes.
 
 Then invoke it in the target repository:
 
@@ -51,12 +56,13 @@ Then invoke it in the target repository:
 
 Or invoke the modeling workflow directly:
 
-> Use $event-modeling to model this feature before implementation.
+> Use em to model this feature, following this repository's engineering policy.
 
-Both skills support Python, TypeScript, and Svelte migrations and adapt to other
-stacks. Installation makes the guidance available; adopting a project policy and
-configuring checks are separate work. Installation does not automatically rewrite
-code or enforce every recommendation.
+The guidance supports Python, TypeScript, and Svelte migrations and adapts to
+other stacks. em is development tooling, not an application runtime dependency.
+Its basic model/render/validate workflow needs no upstream Claude skill bundle
+or MCP server. Installation makes tools available; adopting a project policy and
+configuring checks are separate work. It does not rewrite application code.
 
 ## Contents
 
