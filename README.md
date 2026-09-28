@@ -2,7 +2,7 @@
 
 Reusable skills for maintainable code, careful delivery, model routing, and usage awareness:
 
-- `clear-code` — adapt maintainability rules, practical DDD boundaries,
+- `clear-code` — adapt maintainability rules, Event Modeling, practical DDD boundaries,
   complexity review, and enforcement to a repository.
 - `trunk-based-delivery` — deliver a small change through a short-lived branch.
 - `draft-commit` — draft or create a truthful Conventional Commit.
