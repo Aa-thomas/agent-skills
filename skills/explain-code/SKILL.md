@@ -13,7 +13,9 @@ PR approval, production proof, or evidence of the reader's competence.
 
 1. Identify the requested code, PR, or migration slice and its repository and
    revision. For a diff, record the base and head; for local edits, identify the
-   dirty snapshot. Ask only if the target cannot reasonably be inferred.
+   dirty snapshot. Ask only if the target cannot reasonably be inferred. If the
+   source or revision cannot be accessed, state exactly what is unavailable and
+   stop before presenting inferred behavior as a code explanation.
 2. Read applicable repository instructions, relevant contracts, decision records,
    tickets, and Event Models. Follow the affected callers, rule owner, effects,
    and tests far enough to explain the behavior. Keep the investigation bounded
@@ -97,6 +99,9 @@ different things; report only what was established.
 - Keep all three additions—impact map, important alternatives, explanation
   check—in either format, proportional to the change. Do not force a large
   document onto a simple question.
+- Return one cohesive explanation that identifies the inspected snapshot and
+  evidence limit. Do not append a PR-readiness verdict, implementation change,
+  or claim of learner understanding unless the user separately requests it.
 - Save requested artifacts in an agreed writable location outside application
   source, with a descriptive topic and revision or date. Record the inspected
   snapshot and evidence limits inside the artifact. Do not publish private code
